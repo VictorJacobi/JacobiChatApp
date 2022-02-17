@@ -1,11 +1,39 @@
+import 'package:flash_chat/screens/MyButton.dart';
+import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flash_chat/constants.dart';
+import'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 
 class RegistrationScreen extends StatefulWidget {
+  static const String id = '/registration_screen';
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> {
+class _RegistrationScreenState extends State<RegistrationScreen> with SingleTickerProviderStateMixin {
+
+  final _auth = FirebaseAuth.instance;
+  String email;
+  String password;
+  bool obscure = true;
+  AnimationController animation;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    animation = AnimationController(
+        vsync: this,
+        duration: Duration(
+          seconds: 2,
+        ));
+    animation.forward();
+    animation.addListener(() {
+      setState(() {
+
+      });
+  });
+        }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,80 +44,79 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              height: 200.0,
-              child: Image.asset('images/logo.png'),
-            ),
-            SizedBox(
-              height: 48.0,
-            ),
-            TextField(
-              onChanged: (value) {
-                //Do something with the user input.
-              },
-              decoration: InputDecoration(
-                hintText: 'Enter your email',
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueAccent, width: 1.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueAccent, width: 2.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
+            Flexible(
+              child: Hero(
+                tag: 'logo',
+                child: Container(
+                  height: animation.value*200.0,
+                  child: Image.asset('images/logo.png'),
                 ),
               ),
             ),
             SizedBox(
-              height: 8.0,
+              height: 20.0,
             ),
             TextField(
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.emailAddress,
+              style: TextStyle(
+                color: Colors.black,
+              ),
               onChanged: (value) {
-                //Do something with the user input.
+                email=value;
               },
-              decoration: InputDecoration(
+              decoration: kInputDecoration.copyWith(hintText: 'Enter your email'),
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            TextField(
+              textAlign: TextAlign.center,
+              obscureText: true,
+              style: TextStyle(
+                color: Colors.black,
+              ),
+              onChanged: (value) {
+                password=value;
+              },
+              decoration: kInputDecoration.copyWith(
                 hintText: 'Enter your password',
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueAccent, width: 1.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blueAccent, width: 2.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 24.0,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                elevation: 5.0,
-                child: MaterialButton(
-                  onPressed: () {
-                    //Implement registration functionality.
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: Text(
-                    'Register',
-                    style: TextStyle(color: Colors.white),
+                prefixIcon: TextButton(
+                  onPressed: (){
+                    setState((){
+                      if (obscure==false){
+                        obscure=true;
+                      }
+                      else{
+                        obscure=false;
+                      }
+                    });
+                    },
+                  child: Icon(
+                    obscure==false?Icons.lock_outline_rounded: Icons.lock_open,
+                    color: Colors.grey,
                   ),
                 ),
               ),
             ),
+            SizedBox(
+              height: 15.0,
+            ),
+            ReUsedButton(
+              text: 'Register',
+              onPressed: () async{
+                try {
+                  final newUser = await _auth.createUserWithEmailAndPassword(
+                      email:
+                      email, password: password);
+                  if (newUser != null) {
+                    Navigator.pushNamed(context, ChatScreen.id);
+                  }
+                }catch(e){
+                  print(e);
+                }
+              },
+            )
           ],
         ),
       ),

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "451659968512",
+    "project_id": "jacobi-803f0",
+    "storage_bucket": "jacobi-803f0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:451659968512:android:cdea720aeef29763d068e5",
+        "android_client_info": {
+          "package_name": "co.Jacobi.Jacobi_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "451659968512-7bdirkfq026c2ndo4iecn6t8lqhc5p6b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBY1SNXKz4gJZn9V9tVq7ID-mI_DE0emh0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "451659968512-7bdirkfq026c2ndo4iecn6t8lqhc5p6b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
